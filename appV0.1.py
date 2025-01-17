@@ -1,4 +1,3 @@
-#Grup Didac, Alberto, Steven i Jie
 import pandas as pd
 import logging
 import os
@@ -48,6 +47,9 @@ def lectura_arxiu(ruta):
             # Verificar si hay muchos espacios
             if any('  ' in str(value) for value in row):
                 raise ValueError(f"El fitxer {ruta} té molts espais en la fila {index + 1}.")
+            # Verificar que hay 12 meses
+            if df['Month'].nunique() != 12:
+                raise ValueError(f"El fitxer {ruta} no té 12 mesos.")
 
         # Convertir columnes numèriques i gestionar valors mancants (-999)
         numeric_columns = df.columns[3:]

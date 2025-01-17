@@ -1,4 +1,3 @@
-#Grup Didac, Alberto, Steven i Jie
 import pandas as pd
 import logging
 import os
@@ -12,7 +11,7 @@ init(autoreset=True)
 
 # Configuració del logging
 process_logger = logging.getLogger('process')
-process_logger.setLevel(logging.INFO)
+process_logger.setLevel(logging.INFO)  # Assignar noms de columnes
 process_handler = logging.FileHandler('process.log')
 process_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
 process_logger.addHandler(process_handler)
@@ -31,23 +30,30 @@ def lectura_arxiu(ruta):
             chunk_list.append(chunk)
         df = pd.concat(chunk_list, ignore_index=True)
 
-        # Assignar noms de columnes
-        columns = ['Region', 'Year', 'Month'] + [f'Day_{i + 1}' for i in range(31)]
-        df.columns = columns
-
         # Verificar que cada mes té 31 valors de dia
         for index, row in df.iterrows():
             if len(row) != 34:  # 3 columnes inicials + 31 dies
                 raise ValueError(f"El fitxer {ruta} té un error en la fila {index + 1}: no té 31 valors de dia.")
+
             # Verificar si hay letras en los datos
-            if any(not str(value).replace('.', '', 1).isdigit() for value in row[3:]):
-                raise ValueError(f"El fitxer {ruta} té lletres en la fila {index + 1}.")
+            if index >= 2:  # Ignorar las dos primeras líneas
+                # Ignorar el primer carácter de cada línea a partir de la tercera
+                row_data = row[1:]  # Ignorar el primer carácter
+                for value in row_data:
+                    if not str(value).replace('.', '', 1).isdigit():
+                        error_logger.error(f"Fila con error: {row}")
+                        raise ValueError(
+                            f"El fitxer {ruta} té lletres en la fila {index + 2}, només es permet la 'P' al principi.")
+
             # Verificar si hay intervalos incorrectos (valores fuera de rango)
             if any(value < -999 or value > 999 for value in row[3:] if pd.notna(value)):
                 raise ValueError(f"El fitxer {ruta} té valors fora de rang en la fila {index + 1}.")
             # Verificar si hay muchos espacios
             if any('  ' in str(value) for value in row):
                 raise ValueError(f"El fitxer {ruta} té molts espais en la fila {index + 1}.")
+            # Verificar que hay 12 meses
+            if df['Month'].nunique() != 12:
+                raise ValueError(f"El fitxer {ruta} no té 12 mesos.")
 
         # Convertir columnes numèriques i gestionar valors mancants (-999)
         numeric_columns = df.columns[3:]
