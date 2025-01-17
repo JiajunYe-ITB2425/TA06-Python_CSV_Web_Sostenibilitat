@@ -1,3 +1,4 @@
+#Grup Didac, Alberto, Steven i Jie
 import pandas as pd
 import logging
 import os
