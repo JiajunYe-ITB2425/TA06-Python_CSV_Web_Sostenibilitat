@@ -1,96 +1,94 @@
-# Jiajun, Steven, Dídac, Alberto
-# 17/01/25
-# TA06 Python_CSV_Web_Sostenibilitat
-# Codi per organitzar i procesar dades
-
 import pandas as pd
 import logging
 import os
 
-# Configuració del logging
+# Configuración del logging
 logging.basicConfig(filename='fitxer_log.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Lectura de fitxers
+# Lectura de archivos
 def lectura_arxiu(ruta):
     try:
-        # Llegir el fitxer línia per línia per evitar errors de delimitadors
         with open(ruta, 'r') as file:
             lines = file.readlines()
 
-        # Separar capçalera, metadades i dades
-        capçalera = lines[0].strip()
-        metadata = lines[1].strip()
-        dades_linies = lines[2:]
-
-        # Processar les dades principals
+        # Separar datos
         data = []
-        for line in dades_linies:
+        for line in lines[2:]:  # Ignorar las dos primeras líneas (cabecera y metadatos)
             fields = line.strip().split()
             data.append(fields)
 
-        # Convertir les dades en dataframe
+        # Crear DataFrame
         columns = ['Region', 'Year', 'Month'] + [f'Day_{i + 1}' for i in range(31)]
         df = pd.DataFrame(data, columns=columns[:len(data[0])])
 
-        # Convertir columnes numèriques i gestionar valors mancants (-999)
+        # Convertir a numérico y gestionar valores faltantes
         numeric_columns = df.columns[3:]
         df[numeric_columns] = df[numeric_columns].apply(pd.to_numeric, errors='coerce')
         df.replace(-999, pd.NA, inplace=True)
 
-        logging.info(f"Fitxer processat amb èxit: {ruta}")
+        logging.info(f"Archivo procesado con éxito: {ruta}")
         return df
 
     except Exception as e:
-        logging.error(f"Error processant el fitxer {ruta}: {e}")
+        logging.error(f"Error procesando el archivo {ruta}: {e}")
         raise
 
-def calculate_statistics(df):
-    try:
-        # Percentatge de valors mancants
-        missing_percentage = df.isna().mean() * 100
+# Estadísticas generales acumuladas
+def calculate_global_statistics(df, global_stats):
+    # Actualizar el total de valores
+    global_stats['total_values'] += df.size
 
-        # Estadístiques bàsiques
-        annual_totals = df.groupby('Year').sum(numeric_only=True).sum(axis=1)
-        annual_means = df.groupby('Year').mean(numeric_only=True).mean(axis=1)
+    # Actualizar los valores faltantes
+    global_stats['missing_values'] += df.isna().sum().sum()
 
-        # Tendència anual
-        trend = annual_totals.pct_change() * 100
+    # Contar líneas procesadas
+    global_stats['total_lines'] += len(df)
 
-        # Extrems
-        max_year = annual_totals.idxmax()
-        min_year = annual_totals.idxmin()
+    return global_stats
 
-        # Resultats
-        results = {
-            'missing_percentage': missing_percentage,
-            'annual_totals': annual_totals,
-            'annual_means': annual_means,
-            'trend': trend,
-            'max_year': max_year,
-            'min_year': min_year
-        }
-        return results
+# Mostrar el informe general
+def mostrar_informe(global_stats, num_archivos):
+    missing_percentage = (global_stats['missing_values'] / global_stats['total_values']) * 100
 
-    except Exception as e:
-        logging.error(f"Error calculant estadístiques: {e}")
-        raise
+    print("=============================================================")
+    print("                ANÁLISIS DE PRECIPITACIÓN - INFORME COMPLETO")
+    print("=============================================================")
+    print("\n1. ESTADÍSTICAS GENERALES")
+    print("-------------------------------------------------------------")
+    print(f"Total de valores procesados: {global_stats['total_values']:,}")
+    print(f"Valores faltantes (-999): {global_stats['missing_values']:,}")
+    print(f"Porcentaje de datos faltantes: {missing_percentage:.2f}%")
+    print(f"Archivos procesados: {num_archivos:,}")
+    print(f"Líneas procesadas: {global_stats['total_lines']:,}")
+    print("=============================================================\n")
 
 # Variables
-ruta_carpeta = '../dades/'
+ruta_carpeta = '../../E01/proves'
 prefix = 'precip'
+
+# Inicializar estadísticas globales
+global_stats = {
+    'total_values': 0,
+    'missing_values': 0,
+    'total_lines': 0
+}
+num_archivos = 0
 
 # Bucle
 for arxiu in sorted(os.listdir(ruta_carpeta), key=lambda x: int(''.join(filter(str.isdigit, x))) if x.startswith(prefix) else float('inf')):
     if arxiu.startswith(prefix):
         ruta = os.path.join(ruta_carpeta, arxiu)
 
-        # Processar el fitxer
+        # Procesar el archivo
         try:
             dataframe = lectura_arxiu(ruta)
-            stats = calculate_statistics(dataframe)
+            global_stats = calculate_global_statistics(dataframe, global_stats)
+            num_archivos += 1
 
-            # Mostrar resultats
-            print(f"Processant {arxiu}: ÈXIT")
+            print(f"Procesando {arxiu}: ÉXITO")
         except Exception as e:
-            logging.error(f"Processant {arxiu}: ERROR: {e}")
+            logging.error(f"Procesando {arxiu}: ERROR: {e}")
+
+# Mostrar informe general
+mostrar_informe(global_stats, num_archivos)
