@@ -1,76 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>TA06</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        h1 {
-            color: #343a40;
-        }
-        .card-header {
-            background-color: #007bff;
-            color: white;
-        }
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0, 123, 255, 0.05);
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <h1 class="my-4">Weather Data Statistics</h1>
-        <div class="card mb-4">
-            <div class="card-header">
-                <h2>Weather Data</h2>
-            </div>
-            <div class="card-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Temperature</th>
-                            <th>Humidity</th>
-                        </tr>
-                    </thead>
-                    <tbody id="weather-data">
-                        <!-- Data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+<html lang="ca">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/styles.css">
+        <title>Resums Estadístics</title>
+    </head>
+    <body>
+        <h1>Resums Estadístics de Precipitació</h1>
+        <h2>Gràfics</h2>
+        <img src="img/grafic_total_precip.png" alt="Gràfic de Precipitació Total">
+        <img src="img/grafic_variacio_anual.png" alt="Gràfic de Variació Anual">
 
-    <script>
-        $(document).ready(function() {
-            function updateWeatherData() {
-                $.ajax({
-                    url: '/update',
-                    type: 'GET',
-                    success: function(response) {
-                        var tbody = $('#weather-data');
-                        tbody.empty();
-                        response.weather_data.forEach(function(data) {
-                            var row = `<tr>
-                                <td>${data.time}</td>
-                                <td>${data.temperature}</td>
-                                <td>${data.humidity}</td>
-                            </tr>`;
-                            tbody.append(row);
-                        });
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-            setInterval(updateWeatherData, 5000);
-            updateWeatherData();
-        });
-    </script>
-</body>
+        <h2>Descàrrega de Dades</h2>
+        <p><a href="csv/resum_estadistic.csv">Descarregar Resum Estadístic (CSV)</a></p>
+    </body>
 </html>
