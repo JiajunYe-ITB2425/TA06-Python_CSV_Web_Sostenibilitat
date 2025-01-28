@@ -3,103 +3,45 @@ import matplotlib.pyplot as plt
 import logging
 import os
 
-# Configuración del logging
+# Configuració del logging
 logging.basicConfig(filename='fitxer_log.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-def exportar_resums_a_csv(annual_stats, nombre_archivo):
+# Fitxer CSV
+def exportar_resums_csv(annual_stats, fitxer_csv):
     try:
-        annual_stats.to_csv(nombre_archivo, index=True)
-        logging.info(f"Resumen estadístico exportado a {nombre_archivo}")
+        file_path = os.path.join("../csv", fitxer_csv)
+
+        annual_stats.to_csv(file_path, index=True)
+        logging.info(f"Resum estadístic exportat a {fitxer_csv}")
     except Exception as e:
-        logging.error(f"Error exportando resumen a CSV: {e}")
+        logging.error(f"Error exportant resum a CSV: {e}")
         raise
 
-def mostrar_grafics(annual_stats):
+# Gràfics
+def grafics(annual_stats):
     try:
         plt.figure(figsize=(10, 6))
         annual_stats['total_precip'].plot(kind='bar', color='skyblue')
-        plt.title('Precipitación Total por Año')
-        plt.xlabel('Año')
-        plt.ylabel('Precipitación Total')
+        plt.title('Precipitació Total por Año')
+        plt.xlabel('Any')
+        plt.ylabel('Precipitació Total')
         plt.tight_layout()
-        plt.savefig('grafic_total_precip.png')
-        plt.show()
+        plt.savefig(os.path.join("../img", 'grafic_total_precip.png'))
+        plt.close()
 
         plt.figure(figsize=(10, 6))
         annual_stats['Annual_Variation'].plot(kind='line', marker='o', color='orange')
-        plt.title('Tasa de Cambio Anual (%)')
-        plt.xlabel('Año')
-        plt.ylabel('Cambio (%)')
+        plt.title('Tasa de Canvi Anual (%)')
+        plt.xlabel('Any')
+        plt.ylabel('Canvi (%)')
         plt.grid()
         plt.tight_layout()
-        plt.savefig('grafic_variacio_anual.png')
-        plt.show()
+        plt.savefig(os.path.join("../img", 'grafic_variacio_anual.png'))
+        plt.close()
 
     except Exception as e:
-        logging.error(f"Error generando gráficos: {e}")
-        raise
-
-def generar_pagina_web(annual_stats, output_dir="web"):
-    try:
-        os.makedirs(output_dir, exist_ok=True)
-
-        # Exportar los datos a CSV para la web
-        resumen_csv = os.path.join(output_dir, "resumen_estadistico.csv")
-        annual_stats.to_csv(resumen_csv, index=True)
-
-        # Crear HTML
-        html = f"""
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="stylesheet" href="styles.css">
-            <title>Resúmenes Estadísticos</title>
-        </head>
-        <body>
-            <h1>Resúmenes Estadísticos de Precipitación</h1>
-            <h2>Gráficos</h2>
-            <img src="grafic_total_precip.png" alt="Gráfico de Precipitación Total">
-            <img src="grafic_variacio_anual.png" alt="Gráfico de Variación Anual">
-
-            <h2>Descarga de Datos</h2>
-            <p><a href="resumen_estadistico.csv">Descargar Resumen Estadístico (CSV)</a></p>
-        </body>
-        </html>
-        """
-
-        # Guardar HTML
-        with open(os.path.join(output_dir, "index.html"), "w") as file:
-            file.write(html)
-
-        # Crear CSS básico
-        css = """
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        """
-
-        with open(os.path.join(output_dir, "styles.css"), "w") as file:
-            file.write(css)
-
-        # Mover los gráficos
-        os.replace('grafic_total_precip.png', os.path.join(output_dir, 'grafic_total_precip.png'))
-        os.replace('grafic_variacio_anual.png', os.path.join(output_dir, 'grafic_variacio_anual.png'))
-
-        logging.info("Página web generada con éxito")
-    except Exception as e:
-        logging.error(f"Error generando la página web: {e}")
+        logging.error(f"Error generant gràfics: {e}")
         raise
 
 # Lectura de archivos
@@ -180,11 +122,29 @@ def mostrar_informe(global_stats, num_archivos, annual_stats):
 
     print("\n2. ESTADÍSTICAS ANUALES")
     print("-------------------------------------------------------------")
-    print(f"Precipitación total y media por año:\n{annual_stats[['total_precip', 'avg_precip']]}")
-    print(f"Años más pluviosos y más secos:\n{annual_stats[['max_precip', 'min_precip']]}")
-    print(f"Tasa de cambio anual de las precipitaciones (%):\n{annual_stats['Annual_Variation']}")
-    print(f"Desviación estándar anual de las precipitaciones:\n{annual_stats['std_precip']}")
-    print(f"Promedio mensual de precipitaciones:\n{annual_stats['avg_month_precip']}")
+
+    # Precipitació total y mitjana por any
+    print("\nPrecipitació total y mitjana por any (primer 5 anys):")
+    print(annual_stats[['total_precip', 'avg_precip']].head(), "\n")
+
+    # Tasa de canvi anual de les precipitacions
+    print("Tasa de canvi anual de les precipitacions (%):")
+    print(annual_stats[['Annual_Variation']].dropna().round(2).head(), "\n")
+
+    # Variació estàndar anual de les precipitacions
+    print("Variació estàndar anual de les precipitacions:")
+    print(annual_stats[['std_precip']].dropna().round(2).head(), "\n")
+
+    # Mitjana mensual de precipitacions
+    avg_month_precip = annual_stats['avg_month_precip'].mean()
+    print(f"Mitjana mensual de precipitacions: {avg_month_precip:.2f} mm\n")
+
+    # Anys més plujosos y més secs
+    print("Anys más pluviosos y más secos:")
+    max_precip_year = annual_stats['max_precip'].idxmax()
+    min_precip_year = annual_stats['min_precip'].idxmin()
+    print(f"Anys més plujós: {max_precip_year} amb {annual_stats['max_precip'].max():,.2f} mm")
+    print(f"Any més sec: {min_precip_year} amb {annual_stats['min_precip'].min():,.2f} mm\n")
     print("=============================================================\n")
 
 # Variables
@@ -223,10 +183,6 @@ for arxiu in sorted(os.listdir(ruta_carpeta), key=lambda x: int(''.join(filter(s
         except Exception as e:
             logging.error(f"Procesando {arxiu}: ERROR: {e}")
 
-# Verificar si no se encontró ningún archivo
-if not files_found:
-    print("No se han encontrado archivos con el prefijo 'precip' en la carpeta especificada.")
-
 # Concatenar estadísticas anuales
 if annual_stats_list:
     annual_stats_all = pd.concat(annual_stats_list)
@@ -235,11 +191,7 @@ if annual_stats_list:
     mostrar_informe(global_stats, num_archivos, annual_stats_all)
 
     # Exportar resumen a CSV
-    exportar_resums_a_csv(annual_stats_all, "resumen_estadistico.csv")
+    exportar_resums_csv(annual_stats_all, "resum_estadistic.csv")
 
     # Mostrar gráficos
-    mostrar_grafics(annual_stats_all)
-
-    # Generar página web
-    generar_pagina_web(annual_stats_all)
-
+    grafics(annual_stats_all)
