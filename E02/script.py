@@ -4,13 +4,13 @@ import logging
 import os
 
 # Configuració del logging
-logging.basicConfig(filename='fitxer_log.log', level=logging.INFO,
+logging.basicConfig(filename='../E04/code/fitxer_log.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Fitxer CSV
 def exportar_resums_csv(annual_stats, fitxer_csv):
     try:
-        file_path = os.path.join("../csv", fitxer_csv)
+        file_path = os.path.join("../E03", fitxer_csv)
 
         annual_stats.to_csv(file_path, index=True)
         logging.info(f"Resum estadístic exportat a {fitxer_csv}")
@@ -27,7 +27,7 @@ def grafics(annual_stats):
         plt.xlabel('Any')
         plt.ylabel('Precipitació Total')
         plt.tight_layout()
-        plt.savefig(os.path.join("../img", 'grafic_total_precip.png'))
+        plt.savefig(os.path.join("../E03", 'grafic_total_precip.png'))
         plt.close()
 
         plt.figure(figsize=(10, 6))
@@ -37,7 +37,7 @@ def grafics(annual_stats):
         plt.ylabel('Canvi (%)')
         plt.grid()
         plt.tight_layout()
-        plt.savefig(os.path.join("../img", 'grafic_variacio_anual.png'))
+        plt.savefig(os.path.join("../E03", 'grafic_variacio_anual.png'))
         plt.close()
 
     except Exception as e:
@@ -148,7 +148,7 @@ def mostrar_informe(global_stats, num_archivos, annual_stats):
     print("=============================================================\n")
 
 # Variables
-ruta_carpeta = '../../E01/proves'
+ruta_carpeta = '../E01/proves'
 prefix = 'precip'
 
 # Inicializar estadísticas globales
