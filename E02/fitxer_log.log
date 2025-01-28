@@ -1,0 +1,8 @@
+2025-01-28 09:24:22,917 - INFO - Archivo procesado con éxito: /home/jiajun.ye.7e6/PycharmProjects/TA06-Python_CSV_Web_Sostenibilitat/E01/proves/precip.P20171.MIROC5.RCP60.2006-2100.REGRESION.dat
+2025-01-28 09:24:22,977 - INFO - Archivo procesado con éxito: /home/jiajun.ye.7e6/PycharmProjects/TA06-Python_CSV_Web_Sostenibilitat/E01/proves/precip.P20174.MIROC5.RCP60.2006-2100.REGRESION.dat
+2025-01-28 09:24:23,034 - INFO - Archivo procesado con éxito: /home/jiajun.ye.7e6/PycharmProjects/TA06-Python_CSV_Web_Sostenibilitat/E01/proves/precip.P20175.MIROC5.RCP60.2006-2100.REGRESION.dat
+2025-01-28 09:24:23,077 - ERROR - Error exportant resum a CSV: Cannot save file into a non-existent directory: '../E03'
+2025-01-28 09:36:24,672 - INFO - Archivo procesado con éxito: ../../E01/proves/precip.P20171.MIROC5.RCP60.2006-2100.REGRESION.dat
+2025-01-28 09:36:24,733 - INFO - Archivo procesado con éxito: ../../E01/proves/precip.P20174.MIROC5.RCP60.2006-2100.REGRESION.dat
+2025-01-28 09:36:24,797 - INFO - Archivo procesado con éxito: ../../E01/proves/precip.P20175.MIROC5.RCP60.2006-2100.REGRESION.dat
+2025-01-28 09:36:24,845 - INFO - Resum estadístic exportat a resum_estadistic.csv
