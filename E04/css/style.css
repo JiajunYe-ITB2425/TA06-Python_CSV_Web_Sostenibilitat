@@ -1,14 +1,270 @@
+        /* Estilos para el banner de cookies centrado */
+        #cookie-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-size: 1.2rem;
+        }
+        #cookie-banner .container {
+            text-align: center;
+        }
+        #cookie-banner button {
+            margin-top: 20px;
+        }
+        /* Bloquear la interacción con el contenido hasta que se acepte/rechace */
+        body {
+            overflow: hidden;
+        }
+/* General */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
 }
 
-h1 {
-    color: #333;
+h1, h2, h3, h4 {
+    font-family: 'Roboto', sans-serif;
 }
 
-img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
+/* Header */
+header {
+    background: linear-gradient(135deg, #0062E6, #33AEFF);
+    color: white;
+    padding: 60px 0;
 }
+
+header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+    /* Estilos para la sección Acerca de */
+    #acerca h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #0062E6;
+    }
+
+    #acerca p {
+        font-size: 1.1rem;
+        color: #6c757d;  /* Color gris para el texto */
+        line-height: 1.6;  /* Espaciado entre líneas */
+        margin-bottom: 20px;
+    }
+
+    #acerca .img-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    /* Estilo para un enlace destacado, si es necesario */
+    #acerca a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    #acerca a:hover {
+        text-decoration: underline;
+    }
+
+    /* Alineación y estilo de los textos */
+    .acerca-text-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .acerca-text-wrapper p {
+        max-width: 800px;  /* Limitar el ancho del texto para mejor legibilidad */
+        text-align: justify;
+    }
+
+
+    /* Responsividad para pantallas pequeñas */
+    @media (max-width: 768px) {
+        #acerca h2 {
+            font-size: 1.6rem;  /* Reducir tamaño de texto en pantallas pequeñas */
+        }
+
+        #acerca p {
+            font-size: 1rem;   /* Reducir tamaño del texto */
+        }
+
+        .acerca-text-wrapper {
+            padding: 0 20px;  /* Aumentar el padding para mejor visualización en móviles */
+        }
+    }
+
+
+    /* Estilos para la sección de equipo */
+    .team-section {
+        padding: 70px 0;
+        background-color: #f9f9f9;
+    }
+
+    .team-section h2 {
+        font-size: 2.5rem;
+        color: #007bff;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .team-section p {
+        font-size: 1.1rem;
+        color: #777;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .team {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .team-member {
+        text-align: center;
+        max-width: 220px;
+        margin: 0 15px;
+    }
+
+    .team-member img {
+        width: auto;
+        height: auto;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .team-member img:hover {
+        transform: scale(1.1);
+    }
+
+    .team-member h3 {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Responsividad */
+    @media (max-width: 768px) {
+        .team-section h2 {
+            font-size: 2rem;
+        }
+
+        .team-member {
+            margin-bottom: 20px;
+        }
+
+        .team-member img {
+            width: 120px;
+            height: 120px;
+        }
+    }
+
+    /* Gráficos */
+    .grafico {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    section {
+        padding: 70px 0;
+    }
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: #007bff;
+    }
+
+    .section-header p {
+        font-size: 1.1rem;
+        color: #777;
+    }
+
+    /* Botones */
+    .btn {
+        font-size: 1.2rem;
+        font-weight: 600;
+        padding: 12px 20px;
+    }
+
+    .btn-lg {
+        font-size: 1.5rem;
+        padding: 15px 25px;
+    }
+
+    /* Floating Action Buttons */
+    .fab-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+    }
+
+    .fab {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        font-size: 28px;
+        transition: all 0.3s ease;
+    }
+
+    .fab:hover {
+        background-color: #0056b3;
+    }
+
+    .fab-contact {
+        background-color: #28a745;
+    }
+
+    .fab-contact:hover {
+        background-color: #218838;
+    }
+
+    /* Footer */
+    footer {
+        background-color: #333;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    footer p {
+        font-size: 1rem;
+    }
